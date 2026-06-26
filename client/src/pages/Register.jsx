@@ -197,7 +197,10 @@ export default function Register() {
 
           <div className="animate-fade-in-up animation-delay-300">
             <button
-              onClick={() => window.location.href = `http://localhost:5000/api/auth/google`}
+              onClick={() => {
+                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                window.location.href = `${baseUrl.replace('/api', '')}/api/auth/google`;
+              }}
               className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white/70 dark:bg-surface-800/40 backdrop-blur-md border border-white/60 dark:border-white/10 rounded-xl text-sm font-medium text-surface-700 dark:text-surface-200 hover:bg-white dark:hover:bg-surface-800 hover:border-white dark:hover:border-white/20 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
