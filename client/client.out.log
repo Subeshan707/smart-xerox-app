@@ -1,0 +1,24 @@
+
+> xerox-client@0.0.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v5.4.21  ready in 2743 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.86.90:5173/
+7:02:23 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+7:02:23 AM [vite] hmr update /src/customer/pages/QueueTracker.jsx, /src/index.css
+7:02:23 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+9:46:51 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+9:46:58 AM [vite] hmr update /src/customer/pages/QueueTracker.jsx, /src/index.css
+10:16:28 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:16:28 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:16:36 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:16:53 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:17:20 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:18:16 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:19:03 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:19:13 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:19:21 AM [vite] hmr update /src/customer/pages/NewBooking.jsx, /src/index.css
+10:19:46 AM [vite] hmr update /src/customer/pages/QueueTracker.jsx, /src/index.css

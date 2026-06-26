@@ -1,0 +1,126 @@
+⚠️  Google OAuth not configured (missing GOOGLE_CLIENT_ID)
+✅ Connected to MongoDB
+🚀 Server running on port 5000
+🔌 Socket.io ready
+📋 API: http://localhost:5000/api/health
+🔌 Socket connected: rNF4qhQi2a-ROzmfAAAC (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: rNF4qhQi2a-ROzmfAAAC (client namespace disconnect)
+🔌 Socket connected: 4Hn4gay8Tn4o9qIuAAAE (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → 4Hn4gay8Tn4o9qIuAAAE joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: tw6bRaDceoZj_dE9AAAG (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → tw6bRaDceoZj_dE9AAAG joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: tw6bRaDceoZj_dE9AAAG (client namespace disconnect)
+🔌 Socket disconnected: 4Hn4gay8Tn4o9qIuAAAE (client namespace disconnect)
+🔌 Socket connected: _mwwHRrBDbyR7qBVAAAJ (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → _mwwHRrBDbyR7qBVAAAJ joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: _mwwHRrBDbyR7qBVAAAJ (transport close)
+🔌 Socket connected: tHWeM9CfxBkCN5YRAAAM (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: tHWeM9CfxBkCN5YRAAAM (client namespace disconnect)
+🔌 Socket connected: --k5SJsYRzyzNu_HAAAO (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → --k5SJsYRzyzNu_HAAAO joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: YMeryuagxp14LE-5AAAQ (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → YMeryuagxp14LE-5AAAQ joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: MSjnwg64gCBn0R2cAAAT (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+   → MSjnwg64gCBn0R2cAAAT joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket connected: N85WbjSL0uMLIA0JAAAV (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+   → N85WbjSL0uMLIA0JAAAV joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: N85WbjSL0uMLIA0JAAAV (client namespace disconnect)
+🔌 Socket connected: ZFt4nCw5rEhisOLaAAAX (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+   → ZFt4nCw5rEhisOLaAAAX joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: ZFt4nCw5rEhisOLaAAAX (client namespace disconnect)
+🔌 Socket connected: 6NZjAVpDuRbTnOCxAAAZ (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+   → 6NZjAVpDuRbTnOCxAAAZ joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: MSjnwg64gCBn0R2cAAAT (transport close)
+🔌 Socket disconnected: 6NZjAVpDuRbTnOCxAAAZ (transport close)
+🔌 Socket connected: cBqt0Ah1dTN3ggMaAAAc (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: YMeryuagxp14LE-5AAAQ (client namespace disconnect)
+🔌 Socket connected: PecSAiA7hDRGnRCFAAAf (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: PecSAiA7hDRGnRCFAAAf (transport close)
+🔌 Socket disconnected: --k5SJsYRzyzNu_HAAAO (transport close)
+🔌 Socket disconnected: cBqt0Ah1dTN3ggMaAAAc (transport close)
+🔌 Socket connected: BkFVwYErga9tn3JCAAAh (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → BkFVwYErga9tn3JCAAAh joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: soIoLXLFfMRSFm8yAAAj (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: soIoLXLFfMRSFm8yAAAj (transport close)
+🔌 Socket disconnected: BkFVwYErga9tn3JCAAAh (transport close)
+🔌 Socket connected: Shjo56U4JaB-kDxsAAAm (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket connected: YmZhakS_t_6EkMsfAAAn (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → YmZhakS_t_6EkMsfAAAn joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: Shjo56U4JaB-kDxsAAAm (transport close)
+🔌 Socket disconnected: YmZhakS_t_6EkMsfAAAn (transport close)
+🔌 Socket connected: tX3k_XrlGHLripoqAAAq (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket connected: f30rNMncOB51QpwHAAAr (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → f30rNMncOB51QpwHAAAr joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: tX3k_XrlGHLripoqAAAq (transport close)
+🔌 Socket disconnected: f30rNMncOB51QpwHAAAr (transport close)
+🔌 Socket connected: Lm-1US1SwPe0PDN0AAAt (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → Lm-1US1SwPe0PDN0AAAt joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: 2_jJ-RBeJruRDidxAAAv (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: 2_jJ-RBeJruRDidxAAAv (transport close)
+🔌 Socket disconnected: Lm-1US1SwPe0PDN0AAAt (transport close)
+🔌 Socket connected: VZWT3K4XTQcebaA9AAAy (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → VZWT3K4XTQcebaA9AAAy joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: vq3McmWS0uONG8aoAAAz (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: VZWT3K4XTQcebaA9AAAy (transport close)
+🔌 Socket disconnected: vq3McmWS0uONG8aoAAAz (transport close)
+🔌 Socket connected: 1YTma1tmufbi1pIdAAA2 (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → 1YTma1tmufbi1pIdAAA2 joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: aBtzBLbXSl8JMXFIAAA3 (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: aBtzBLbXSl8JMXFIAAA3 (transport close)
+🔌 Socket connected: hfP3_33HK8ysE9SiAAA6 (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: hfP3_33HK8ysE9SiAAA6 (transport close)
+🔌 Socket disconnected: 1YTma1tmufbi1pIdAAA2 (transport close)
+🔌 Socket connected: vL-0M_2uE-seE-L6AAA9 (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: t7qoQusxrctLTZbAAAA- (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+   → vL-0M_2uE-seE-L6AAA9 joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: t7qoQusxrctLTZbAAAA- (transport close)
+🔌 Socket connected: hi6wIfT0v7o8AnFvAABB (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: hi6wIfT0v7o8AnFvAABB (transport close)
+🔌 Socket disconnected: vL-0M_2uE-seE-L6AAA9 (transport close)
+🔌 Socket connected: X80mgFZxfztf5mXzAABD (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → X80mgFZxfztf5mXzAABD joined customer:6a34faba810fabc78726ce04
+🔌 Socket connected: xAPE_twHHpAmgIEbAABF (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: xAPE_twHHpAmgIEbAABF (transport close)
+🔌 Socket disconnected: X80mgFZxfztf5mXzAABD (transport close)
+🔌 Socket connected: GblXxoQYsUU7jFbXAABI (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket connected: OFmB05qo4opKy8SUAABJ (customer)
+   → Joined customer:6a34faba810fabc78726ce04
+   → OFmB05qo4opKy8SUAABJ joined customer:6a34faba810fabc78726ce04
+🔌 Socket disconnected: GblXxoQYsUU7jFbXAABI (transport close)
+🔌 Socket connected: OiHw7U7KLyxBYSYZAABM (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
+🔌 Socket disconnected: OFmB05qo4opKy8SUAABJ (transport close)
+🔌 Socket connected: W9i6-n1uwvTEdE3_AABP (shopOperator)
+   → Joined operator:6a34fab7810fabc78726cdf4
