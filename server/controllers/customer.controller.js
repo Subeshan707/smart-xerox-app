@@ -176,8 +176,11 @@ exports.createBooking = async (req, res) => {
     }
 
     if (printDayStr === todayStr && printDayHours && printDayHours.isOpen) {
+      // Fix Timezone: Server is UTC, but shop hours are IST (+5:30)
       const now = new Date();
-      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      now.setMinutes(now.getMinutes() + 330); // Convert UTC to IST
+      const currentTime = `${now.getUTCHours().toString().padStart(2, '0')}:${now.getUTCMinutes().toString().padStart(2, '0')}`;
+      
       if (printDayHours.open && currentTime < printDayHours.open) {
         return res.status(400).json({ error: `Shop opens at ${printDayHours.open} today` });
       }
