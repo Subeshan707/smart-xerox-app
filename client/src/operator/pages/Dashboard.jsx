@@ -70,7 +70,7 @@ export default function Dashboard() {
     try {
       await operatorAPI.updateBookingStatus(bookingId, newStatus);
       dispatch(addToast({ type: 'success', message: `Status updated to ${newStatus}` }));
-      fetchDashboard();
+      await fetchDashboard();
     } catch {
       dispatch(addToast({ type: 'error', message: 'Failed to update status' }));
     }
@@ -144,7 +144,7 @@ export default function Dashboard() {
 
   return (
     <Box sx={{ animation: 'fadeIn 0.5s ease', pb: 8 }}>
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { sm: 'center' }, justifyContent: 'space-between', gap: 2, p: 3, mb: 4, bgcolor: 'surfaceContainer.main', borderRadius: 4 }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { sm: 'center' }, justifyContent: 'space-between', gap: 2, p: 3, mb: 4, bgcolor: 'surfaceContainer.main', borderRadius: 2 }}>
         <Box>
           <Typography variant="overline" color="primary.main" fontWeight="bold">Shop Owner Console</Typography>
           <Typography variant="h4" fontWeight="bold">Live Queue</Typography>
@@ -160,24 +160,33 @@ export default function Dashboard() {
       </Box>
 
       {/* Summary bar */}
-      <Grid container spacing={2} sx={{ mb: 6 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 6 }}>
         {[
           { label: 'Total', value: summary.total, color: 'text.primary', bgcolor: 'surfaceContainer.main' },
           { label: 'Queued', value: summary.queued, color: 'warning.main', bgcolor: 'warningContainer.main' },
-          { label: 'Printing', value: summary.printing, color: 'info.main', bgcolor: 'infoContainer.main' },
-          { label: 'Ready', value: summary.ready, color: 'success.main', bgcolor: 'successContainer.main' },
-          { label: 'Done', value: summary.completed, color: 'text.secondary', bgcolor: 'surfaceContainerHighest.main' },
+          { label: 'Done', value: summary.completed, color: 'success.main', bgcolor: 'successContainer.main' },
         ].map(stat => (
-          <Grid item xs={6} sm={4} lg={2.4} key={stat.label}>
-            <Card sx={{ bgcolor: stat.bgcolor, textAlign: 'center', height: '100%', border: 1, borderColor: 'divider', boxShadow: 'none' }}>
-              <CardContent>
-                <Typography variant="h3" fontWeight="900" sx={{ color: stat.color }}>{stat.value}</Typography>
-                <Typography variant="caption" fontWeight="bold" color="text.secondary" textTransform="uppercase" letterSpacing={1}>{stat.label}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <Card key={stat.label} sx={{ 
+            bgcolor: stat.bgcolor, 
+            textAlign: 'center',
+            width: { xs: 'calc(50% - 8px)', sm: 130 },
+            flexShrink: 0, 
+            aspectRatio: '1 / 1',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 1, 
+            borderColor: 'divider', 
+            boxShadow: 'none',
+            borderRadius: 2
+          }}>
+            <CardContent sx={{ p: 2, '&:last-child': { pb: 2 }, width: '100%' }}>
+              <Typography variant="h3" fontWeight="900" sx={{ color: stat.color }}>{stat.value}</Typography>
+              <Typography variant="caption" fontWeight="bold" color="text.secondary" textTransform="uppercase" letterSpacing={1}>{stat.label}</Typography>
+            </CardContent>
+          </Card>
         ))}
-      </Grid>
+      </Box>
 
       {/* Active queue */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>

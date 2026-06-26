@@ -24,57 +24,43 @@ export default function BookingCard({ booking, showActions = true }) {
         } : {}
       }}
     >
-      <CardContent sx={{ pb: '16px !important' }}>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+      <CardContent>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
           {/* Thumbnail */}
           <Avatar 
             variant="rounded" 
             src={thumbnailUrl || undefined}
-            sx={{ width: 56, height: 56, bgcolor: 'surfaceContainerHighest.main', color: 'onSurfaceVariant.main' }}
+            sx={{ width: 48, height: 48, bgcolor: 'surfaceContainer.main', color: 'primary.main' }}
           >
             {!thumbnailUrl && <DescriptionIcon />}
           </Avatar>
 
           {/* Details */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography variant="subtitle2" fontWeight="bold">
-                  #{tokenNumber}
-                </Typography>
-                <Badge status={status} />
-              </Box>
-              <Badge status={paymentStatus} showDot={false} />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="subtitle2" fontWeight="bold" noWrap>
+                Token #{tokenNumber}
+              </Typography>
+              <Badge status={status} />
             </Box>
 
-            <Typography variant="caption" color="text.secondary" noWrap sx={{ display: 'block', mb: 1 }}>
-              {jobConfig?.fileName || 'Document'} · {jobConfig?.pageCount || 0} pg · {jobConfig?.copies || 1} copies
+            <Typography variant="caption" color="text.secondary" display="block" noWrap sx={{ mt: 0.5 }}>
+              {jobConfig?.fileName || 'Document'} · {jobConfig?.pageCount || 0} pg
             </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Typography variant="caption" color="text.secondary">
-                  {formatDate(createdAt, 'date-only')}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Need {printDate ? formatDate(printDate, 'date-only') : 'ASAP'}
-                </Typography>
-              </Box>
-              <Typography variant="subtitle2" fontWeight="bold">
-                {formatCurrency(totalPrice)}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+              <Chip 
+                label={formatCurrency(totalPrice)} 
+                color="warning" 
+                variant="tonal" 
+                size="small" 
+                sx={{ height: 20, fontSize: '0.75rem', fontWeight: 'bold' }} 
+              />
+              <Typography variant="caption" color="text.secondary" fontWeight="medium">
+                {formatDate(createdAt, 'date-only')}
               </Typography>
             </Box>
           </Box>
-        </Box>
-
-        {/* Config tags */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2, pt: 2, borderTop: 1, borderColor: 'divider' }}>
-          <Chip size="small" label={jobConfig?.paperSize || 'A4'} sx={{ height: 20, fontSize: '0.65rem', fontWeight: 'bold', bgcolor: 'surfaceContainerHighest.main' }} />
-          <Chip size="small" label={jobConfig?.isColour ? 'Colour' : 'B&W'} sx={{ height: 20, fontSize: '0.65rem', fontWeight: 'bold', bgcolor: 'surfaceContainerHighest.main' }} />
-          {jobConfig?.isDoubleSided && (
-            <Chip size="small" label="Double-sided" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 'bold', bgcolor: 'surfaceContainerHighest.main' }} />
-          )}
-          <Chip size="small" label={jobConfig?.binding === 'none' ? 'No binding' : jobConfig?.binding || 'No binding'} sx={{ height: 20, fontSize: '0.65rem', fontWeight: 'bold', bgcolor: 'surfaceContainerHighest.main' }} />
         </Box>
       </CardContent>
     </Card>

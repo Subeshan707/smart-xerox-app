@@ -45,6 +45,7 @@ export default function NewBooking() {
   const { user } = useSelector((state) => state.auth);
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('online');
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const { queueBooking } = useOfflineQueue();
 
@@ -175,7 +176,7 @@ export default function NewBooking() {
     setFiles(prev => prev.map((f, i) => i === index ? { ...f, jobConfig: { ...f.jobConfig, [key]: value } } : f));
   };
 
-  const canProceedStep2 = files.length > 0 && files.every(f => f.progress === 100 || isOffline);
+  const canProceedStep2 = files.length > 0 && files.every(f => (f.progress === 100 || isOffline) && Number(f.jobConfig.copies) > 0);
 
   const createPendingBooking = async () => {
     const apiFiles = files.map(f => ({ ...(f.uploadedData || {}), jobConfig: f.jobConfig }));
@@ -241,8 +242,8 @@ export default function NewBooking() {
         },
         modal: {
           ondismiss: () => {
-            dispatch(addToast({ type: 'info', message: 'Payment cancelled. Your booking is pending.' }));
-            navigate(`/app/queue/${booking.bookingId}`);
+            dispatch(addToast({ type: 'info', message: 'Payment cancelled. You can try again.' }));
+            setLoading(false);
           },
         },
         theme: { color: '#2563eb' }
@@ -256,6 +257,14 @@ export default function NewBooking() {
       dispatch(addToast({ type: 'error', message: err.response?.data?.error || 'Failed to initiate payment' }));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBookNow = () => {
+    if (paymentMethod === 'online') {
+      handleRazorpayPayment();
+    } else {
+      handleCreateBooking();
     }
   };
 
@@ -313,20 +322,22 @@ export default function NewBooking() {
         <Box sx={{ animation: 'fadeInUp 0.4s ease' }}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>Upload PDFs</Typography>
           
-          <Paper 
-            component="label" 
-            elevation={0}
-            sx={{ 
-              p: 6, mb: 4, display: 'block', textAlign: 'center', cursor: 'pointer',
-              border: '2px dashed', borderColor: 'divider', borderRadius: 4,
-              bgcolor: 'surfaceContainer.main', '&:hover': { bgcolor: 'surfaceContainerHighest.main', borderColor: 'primary.main' }
-            }}
-          >
-            <UploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
-            <Typography variant="subtitle1" fontWeight="bold" color="primary">Add more PDFs</Typography>
-            <Typography variant="body2" color="text.secondary">Maximum 10 files, up to 10MB each</Typography>
-            <input type="file" hidden accept=".pdf,application/pdf" multiple onChange={handleFileChange} />
-          </Paper>
+          {files.length === 0 && (
+            <Paper 
+              component="label" 
+              elevation={0}
+              sx={{ 
+                p: 6, mb: 4, display: 'block', textAlign: 'center', cursor: 'pointer',
+                border: '2px dashed', borderColor: 'divider', borderRadius: 2,
+                bgcolor: 'surfaceContainer.main', '&:hover': { bgcolor: 'surfaceContainerHighest.main', borderColor: 'primary.main' }
+              }}
+            >
+              <UploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+              <Typography variant="subtitle1" fontWeight="bold" color="primary">Upload PDFs</Typography>
+              <Typography variant="body2" color="text.secondary">Maximum 10 files, up to 10MB each</Typography>
+              <input type="file" hidden accept=".pdf,application/pdf" multiple onChange={handleFileChange} />
+            </Paper>
+          )}
 
           {files.map((file, index) => (
             <Card key={index} sx={{ mb: 3, border: 1, borderColor: 'divider', boxShadow: 'none' }}>
@@ -355,7 +366,10 @@ export default function NewBooking() {
                     <TextField 
                       label="Copies" type="number" size="small" fullWidth
                       value={file.jobConfig.copies} 
-                      onChange={(e) => updateFileConfig(index, 'copies', Math.max(1, parseInt(e.target.value) || 1))}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        updateFileConfig(index, 'copies', val === '' ? '' : Math.max(0, parseInt(val) || 0));
+                      }}
                     />
                   </Grid>
                   <Grid size={{ xs: 6, sm: 4, md: 3 }}>
@@ -393,6 +407,14 @@ export default function NewBooking() {
                       <MenuItem value="false">No</MenuItem>
                       <MenuItem value="true">Yes</MenuItem>
                     </TextField>
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
+                    <TextField 
+                      label="Additional Comments / Instructions" size="small" fullWidth
+                      placeholder="e.g. Spiral binding, print first page in color..."
+                      value={file.jobConfig.comments || ''} 
+                      onChange={(e) => updateFileConfig(index, 'comments', e.target.value)}
+                    />
                   </Grid>
                 </Grid>
               </CardContent>
@@ -452,18 +474,38 @@ export default function NewBooking() {
 
           <Grid container spacing={3} sx={{ mb: 4 }}>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Card hover onClick={handleRazorpayPayment} sx={{ height: '100%', border: 2, borderColor: 'primary.main', bgcolor: 'primaryContainer.main' }}>
+              <Card 
+                onClick={() => setPaymentMethod('online')} 
+                sx={{ 
+                  height: '100%', 
+                  border: 2, 
+                  borderColor: paymentMethod === 'online' ? 'primary.main' : 'divider', 
+                  bgcolor: paymentMethod === 'online' ? 'primaryContainer.main' : 'surfaceContainer.main',
+                  transition: 'all 0.2s',
+                  cursor: 'pointer'
+                }}
+              >
                 <CardContent sx={{ textAlign: 'center', py: 3 }}>
-                  <PaymentIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
+                  <PaymentIcon color={paymentMethod === 'online' ? 'primary' : 'action'} sx={{ fontSize: 40, mb: 1 }} />
                   <Typography variant="subtitle1" fontWeight="bold">Pay Now Online</Typography>
                   <Typography variant="caption" color="text.secondary">Razorpay checkout</Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Card hover onClick={handleCreateBooking} sx={{ height: '100%', border: 1, borderColor: 'divider' }}>
+              <Card 
+                onClick={() => setPaymentMethod('shop')} 
+                sx={{ 
+                  height: '100%', 
+                  border: 2, 
+                  borderColor: paymentMethod === 'shop' ? 'primary.main' : 'divider', 
+                  bgcolor: paymentMethod === 'shop' ? 'primaryContainer.main' : 'surfaceContainer.main',
+                  transition: 'all 0.2s',
+                  cursor: 'pointer'
+                }}
+              >
                 <CardContent sx={{ textAlign: 'center', py: 3 }}>
-                  <StoreIcon sx={{ fontSize: 40, color: 'text.secondary', mb: 1 }} />
+                  <StoreIcon color={paymentMethod === 'shop' ? 'primary' : 'action'} sx={{ fontSize: 40, mb: 1 }} />
                   <Typography variant="subtitle1" fontWeight="bold">Pay at Counter</Typography>
                   <Typography variant="caption" color="text.secondary">Pay when you collect</Typography>
                 </CardContent>
@@ -471,8 +513,20 @@ export default function NewBooking() {
             </Grid>
           </Grid>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-start', mt: 4 }}>
-            <Button onClick={handleBack} color="inherit">Back</Button>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 4 }}>
+            <Button onClick={handleBack} color="inherit" disabled={loading}>
+              Back
+            </Button>
+            <Button 
+              variant="contained" 
+              size="large"
+              disabled={loading} 
+              onClick={handleBookNow}
+              startIcon={loading && <CircularProgress size={20} color="inherit" />}
+              sx={{ px: 6, py: 1.5 }}
+            >
+              {loading ? 'Processing...' : 'Book Now'}
+            </Button>
           </Box>
         </Box>
       )}

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-  Typography, Box, Avatar, Stack, Chip, IconButton, Tooltip, Button 
+  Typography, Box, Avatar, Stack, Chip, IconButton, Tooltip, Button, CircularProgress 
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 import ViewIcon from '@mui/icons-material/Visibility';
@@ -10,20 +10,30 @@ import Badge from '../../shared/Badge';
 import StatusBadge from './StatusBadge';
 
 const nextStatus = {
-  queued: 'printing',
-  printing: 'printed',
-  printed: 'ready',
+  queued: 'completed',
+  printing: 'completed',
+  printed: 'completed',
   ready: 'completed',
 };
 
 const actionLabels = {
-  queued: 'Start Printing',
-  printing: 'Mark Printed',
-  printed: 'Mark Ready',
-  ready: 'Complete',
+  queued: 'Mark Completed',
+  printing: 'Mark Completed',
+  printed: 'Mark Completed',
+  ready: 'Mark Completed',
 };
 
 export default function QueueCard({ booking, onStatusUpdate, onViewFile, onPrintFile }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleAction = async () => {
+    setLoading(true);
+    try {
+      await onStatusUpdate(booking._id, nextStatus[booking.status]);
+    } finally {
+      setLoading(false);
+    }
+  };
   const { tokenNumber, customerId, jobConfig, status, thumbnailUrl, fileDeleted, paymentStatus, files = [], printDate, createdAt } = booking;
   const customerName = customerId?.name || 'Customer';
   const customerPhone = customerId?.phone || '';
@@ -90,7 +100,9 @@ export default function QueueCard({ booking, onStatusUpdate, onViewFile, onPrint
               variant="contained"
               color="primary"
               size="small"
-              onClick={() => onStatusUpdate(booking._id, nextStatus[status])}
+              onClick={handleAction}
+              disabled={loading}
+              startIcon={loading ? <CircularProgress size={16} color="inherit" /> : null}
               sx={{ fontWeight: 'bold' }}
             >
               {actionLabels[status]}

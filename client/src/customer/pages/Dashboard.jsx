@@ -98,22 +98,50 @@ export default function Dashboard() {
       </Box>
 
       {/* Wallet Summary Card */}
-      <Paper elevation={0} sx={{ p: 3, mb: 4, bgcolor: 'primaryContainer.main', borderRadius: 4 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Avatar sx={{ bgcolor: 'primary.main', width: 48, height: 48 }}>
-            <WalletIcon />
-          </Avatar>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="body2" color="onPrimaryContainer.main" fontWeight="medium">
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 3, 
+          mb: 4, 
+          bgcolor: 'primaryContainer.main', 
+          borderRadius: 2,
+          maxWidth: 360,
+          position: 'relative'
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+            <Avatar sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', width: 40, height: 40 }}>
+              <WalletIcon fontSize="small" />
+            </Avatar>
+            <Typography variant="body1" color="onPrimaryContainer.main" fontWeight="medium">
               Wallet Balance
             </Typography>
-            <Typography variant="h4" color="onPrimaryContainer.main" fontWeight="bold">
-              ₹{user?.walletBalance || 0}
-            </Typography>
           </Box>
-          <Button variant="contained" color="primary" sx={{ borderRadius: 8 }} onClick={() => navigate('/app/profile')}>
-            Top Up
-          </Button>
+          
+          <Typography variant="h3" color="onPrimaryContainer.main" fontWeight="bold" sx={{ mb: 2, ml: 0.5 }}>
+            ₹{user?.walletBalance || 0}
+          </Typography>
+          
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button 
+              variant="contained" 
+              onClick={() => navigate('/app/profile')}
+              sx={{ 
+                borderRadius: 2, 
+                bgcolor: 'primary.main', 
+                color: 'primary.contrastText', 
+                fontWeight: 'bold',
+                px: 4,
+                '&:hover': { 
+                  bgcolor: 'primary.main',
+                  filter: 'brightness(1.1)'
+                } 
+              }}
+            >
+              Top Up
+            </Button>
+          </Box>
         </Box>
       </Paper>
 
@@ -221,11 +249,13 @@ export default function Dashboard() {
             </Button>
           </Paper>
         ) : (
-          <Stack spacing={2}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
             {recentBookings.map((booking) => (
-              <BookingCard key={booking._id} booking={booking} />
+              <Box key={booking._id} sx={{ width: { xs: '100%', sm: 360 } }}>
+                <BookingCard booking={booking} />
+              </Box>
             ))}
-          </Stack>
+          </Box>
         )}
       </Box>
     </Box>

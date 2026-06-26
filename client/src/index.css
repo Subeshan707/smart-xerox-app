@@ -9,6 +9,14 @@
     box-sizing: border-box;
   }
 
+  *:focus, *:focus-visible, *:focus-within {
+    outline: none !important;
+  }
+
+  input:focus, textarea:focus, select:focus, div:focus {
+    box-shadow: none !important;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;

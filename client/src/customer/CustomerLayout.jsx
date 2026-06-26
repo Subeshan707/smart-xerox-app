@@ -5,9 +5,9 @@ import { logout } from '../store/authSlice';
 import useOfflineQueue from '../hooks/useOfflineQueue';
 import {
   AppBar, Toolbar, IconButton, Typography, Box, BottomNavigation, BottomNavigationAction,
-  Fab, Avatar, Tooltip, Badge, useTheme, useMediaQuery, Stack
+  Fab, Avatar, Tooltip, Badge, useTheme, useMediaQuery, Stack, Menu, MenuItem, ListItemIcon, ListItemText
 } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+import { alpha, useColorScheme } from '@mui/material/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import StoreIcon from '@mui/icons-material/Storefront';
 import HistoryIcon from '@mui/icons-material/History';
@@ -16,7 +16,9 @@ import AddIcon from '@mui/icons-material/Add';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SyncIcon from '@mui/icons-material/Sync';
 import CloudDoneIcon from '@mui/icons-material/CloudDone';
-import ThemeToggle from '../shared/ThemeToggle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 const navItems = [
   { path: '/app/dashboard', label: 'Home', icon: <HomeIcon /> },
@@ -34,7 +36,31 @@ export default function CustomerLayout() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  
+  const handleMenuClick = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+
+  const { mode, setMode } = useColorScheme();
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  const isDark = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  
+  const toggleMode = () => {
+    const newMode = isDark ? 'light' : 'dark';
+    setMode(newMode);
+    if (newMode === 'dark') {
+      document.documentElement.setAttribute('data-mui-color-scheme', 'dark');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.setAttribute('data-mui-color-scheme', 'light');
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   const handleLogout = () => {
+    handleMenuClose();
     dispatch(logout());
     navigate('/login');
   };
@@ -78,7 +104,6 @@ export default function CustomerLayout() {
             </Box>
 
             <Stack direction="row" alignItems="center" spacing={2}>
-              <ThemeToggle />
               {(pendingCount > 0 || syncing) && (
                 <Tooltip title={`${pendingCount} items waiting to sync`}>
                   <Badge badgeContent={pendingCount} color="warning">
@@ -86,19 +111,32 @@ export default function CustomerLayout() {
                   </Badge>
                 </Tooltip>
               )}
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold', lineHeight: 1 }}>
-                  {user?.name || 'User'}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Customer
-                </Typography>
-              </Box>
-              <Tooltip title="Logout">
-                <IconButton onClick={handleLogout} color="default">
-                  <LogoutIcon />
-                </IconButton>
-              </Tooltip>
+              <IconButton onClick={handleMenuClick} color="inherit">
+                <MoreVertIcon />
+              </IconButton>
+              
+              <Menu
+                anchorEl={anchorEl}
+                open={openMenu}
+                onClose={handleMenuClose}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                {mounted && (
+                  <MenuItem onClick={toggleMode}>
+                    <ListItemIcon>
+                      {isDark ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
+                    </ListItemIcon>
+                    <ListItemText>{isDark ? 'Light Mode' : 'Dark Mode'}</ListItemText>
+                  </MenuItem>
+                )}
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" color="error" />
+                  </ListItemIcon>
+                  <ListItemText sx={{ color: 'error.main' }}>Logout</ListItemText>
+                </MenuItem>
+              </Menu>
             </Stack>
           </Toolbar>
         </AppBar>
@@ -115,7 +153,7 @@ export default function CustomerLayout() {
           <Fab 
             color="primary" 
             aria-label="add" 
-            sx={{ position: 'fixed', bottom: 72, right: 16, zIndex: 1000 }}
+            sx={{ position: 'fixed', bottom: 72, right: 16, zIndex: 1000, borderRadius: 4 }}
             onClick={() => navigate('/app/shops')}
           >
             <AddIcon />
@@ -125,11 +163,18 @@ export default function CustomerLayout() {
             showLabels
             sx={{
               position: 'fixed', bottom: 0, left: 0, right: 0, 
-              borderTop: `1px solid ${theme.palette.divider}`,
-              backdropFilter: 'blur(16px)',
-              backgroundColor: alpha(theme.palette.background.default, 0.8),
+              borderTop: 1, borderColor: 'divider',
+              bgcolor: 'background.paper',
               zIndex: 1000,
-              height: 64
+              height: 64,
+              pb: 'env(safe-area-inset-bottom)', // for modern mobile browsers
+              '& .MuiBottomNavigationAction-root': {
+                color: 'text.secondary',
+                minWidth: 'auto',
+                '&.Mui-selected': {
+                  color: 'primary.main',
+                }
+              }
             }}
           >
             {navItems.map((item, index) => (

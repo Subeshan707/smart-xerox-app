@@ -267,7 +267,7 @@ export default function QueueTracker() {
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Typography variant="body2" color="text.secondary">Binding</Typography>
-              <Typography variant="body2" fontWeight="medium" textTransform="capitalize">
+              <Typography variant="body2" fontWeight="medium" sx={{ textTransform: 'capitalize' }}>
                 {booking.jobConfig?.binding === 'none' ? 'No binding' : booking.jobConfig?.binding || 'No binding'}
               </Typography>
             </Box>

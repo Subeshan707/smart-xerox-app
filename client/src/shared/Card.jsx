@@ -13,6 +13,7 @@ export default function Card({
   glass = false, // Not using glass in M3
   padding = 'md',
   onClick,
+  sx = {}
 }) {
   const CardRoot = onClick ? CardActionArea : React.Fragment;
   const rootProps = onClick ? { onClick } : {};
@@ -21,7 +22,7 @@ export default function Card({
     <MuiCard 
       className={className} 
       variant={hover ? "elevation" : "outlined"}
-      sx={{ p: padding === 'none' ? 0 : padding === 'sm' ? 1 : 2 }}
+      sx={{ p: padding === 'none' ? 0 : padding === 'sm' ? 1 : 2, ...sx }}
     >
       <CardRoot {...rootProps}>
         {children}

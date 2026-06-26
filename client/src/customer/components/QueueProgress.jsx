@@ -98,8 +98,8 @@ export default function QueueProgress({ status }) {
     <Stepper activeStep={currentIndex} alternativeLabel connector={<QConnector />}>
       {steps.map((step, index) => {
         return (
-          <Step key={step.key}>
-            <StepLabel StepIconComponent={CustomStepIcon}>
+          <Step key={step.key} active={index === currentIndex} completed={index < currentIndex}>
+            <StepLabel icon={<CustomStepIcon active={index === currentIndex} completed={index < currentIndex} icon={index + 1} />}>
               <Typography variant="body2" fontWeight={index === currentIndex ? 'bold' : 'medium'} color={index === currentIndex ? 'text.primary' : 'text.secondary'}>
                 {step.label}
               </Typography>

@@ -147,15 +147,16 @@ exports.getSignedFileUrl = async (req, res) => {
     if (booking.fileDeleted) {
       return res.status(410).json({ error: 'File has been deleted after printing' });
     }
-    if (!booking.fileUrl) {
+    const hasFiles = booking.files && booking.files.length > 0;
+    if (!booking.fileUrl && !hasFiles) {
       return res.status(404).json({ error: 'No uploaded document found for this booking' });
     }
     res.json({
-      url: booking.fileUrl,
+      url: booking.fileUrl || (hasFiles ? booking.files[0].fileUrl : null),
       files: booking.files || [],
-      fileName: booking.jobConfig?.fileName || 'document',
-      mimeType: booking.mimeType || '',
-      fileSize: booking.fileSize || 0,
+      fileName: booking.jobConfig?.fileName || (hasFiles ? booking.files[0].fileName : 'document'),
+      mimeType: booking.mimeType || (hasFiles ? booking.files[0].mimeType : ''),
+      fileSize: booking.fileSize || (hasFiles ? booking.files[0].fileSize : 0),
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
