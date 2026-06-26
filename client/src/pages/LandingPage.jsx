@@ -1,301 +1,242 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-// --- 3D Interactive Tilt Card Component ---
-const TiltCard = ({ children, className }) => {
-  const ref = useRef(null);
-  
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-15deg", "15deg"]);
-
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className={`relative will-change-transform ${className}`}
-    >
-      {/* 3D Inner Layer translated on Z axis for depth */}
-      <div 
-        style={{ transform: "translateZ(50px)" }}
-        className="absolute inset-0 w-full h-full"
-      >
-        {children}
-      </div>
-      {/* Base Glass Layer */}
-      <div className="absolute inset-0 w-full h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
-      </div>
-    </motion.div>
-  );
-};
-
-const features = [
+const bentoFeatures = [
   {
-    title: 'Zero Queue System',
-    desc: 'Reserve time slots remotely. Your document begins printing precisely when you arrive.',
+    title: 'Reserve Time Slots',
+    desc: 'Skip the line. Book your dedicated printing window online before you even arrive.',
+    colSpan: 'md:col-span-2',
     icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
-    color: 'from-blue-500 to-cyan-400'
+    bg: 'bg-slate-50',
   },
   {
-    title: 'Automated Pricing',
-    desc: 'Upload PDFs to instantly calculate accurate page counts and exact costs before printing.',
+    title: 'Instant Quotes',
+    desc: 'Our engine parses PDFs to instantly calculate accurate page counts and pricing.',
+    colSpan: 'md:col-span-1',
     icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
       </svg>
     ),
-    color: 'from-purple-500 to-pink-500'
+    bg: 'bg-white',
   },
   {
-    title: 'Absolute Privacy',
-    desc: 'Military-grade encryption. Files are completely purged from servers upon print completion.',
+    title: '100% Data Privacy',
+    desc: 'Enterprise-grade security. Files are securely wiped from our servers the moment your print is completed.',
+    colSpan: 'md:col-span-1',
     icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
       </svg>
     ),
-    color: 'from-emerald-400 to-teal-500'
-  }
+    bg: 'bg-slate-900 text-white',
+  },
+  {
+    title: 'Live Queue Tracking',
+    desc: 'View real-time updates and notifications as your document moves from the queue to the printer tray.',
+    colSpan: 'md:col-span-2',
+    icon: (
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+      </svg>
+    ),
+    bg: 'bg-blue-50',
+  },
+];
+
+const steps = [
+  { num: '1', title: 'Schedule', desc: 'Select a shop and book a time slot.' },
+  { num: '2', title: 'Upload', desc: 'Attach documents and review the quote.' },
+  { num: '3', title: 'Collect', desc: 'Pick up your prints when notified.' },
 ];
 
 export default function LandingPage() {
-  const { scrollYProgress } = useScroll();
-  
-  // Advanced Scroll Transforms for Hero
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 100]);
-  const heroBlur = useTransform(scrollYProgress, [0, 0.2], ["blur(0px)", "blur(20px)"]);
-  
-  // Transforms for background orbs
-  const orb1Y = useTransform(scrollYProgress, [0, 1], [0, 500]);
-  const orb2Y = useTransform(scrollYProgress, [0, 1], [0, -500]);
-  const orb3X = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-  // Transforms for Features section entering
-  const featuresY = useTransform(scrollYProgress, [0.1, 0.3], [200, 0]);
-  const featuresOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+  };
 
   return (
-    <div className="bg-[#030014] min-h-[250vh] text-white font-sans overflow-x-hidden selection:bg-purple-500/30">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
       
-      {/* 3D Deep Parallax Background Orbs */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E')] opacity-40 mix-blend-overlay" />
-        
-        <motion.div 
-          style={{ y: orb1Y }}
-          className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-600/30 rounded-full blur-[120px] mix-blend-screen"
-        />
-        <motion.div 
-          style={{ y: orb2Y }}
-          className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-blue-600/20 rounded-full blur-[150px] mix-blend-screen"
-        />
-        <motion.div 
-          style={{ x: orb3X }}
-          className="absolute top-[30%] left-[30%] w-[40vw] h-[40vw] bg-pink-500/10 rounded-full blur-[100px] mix-blend-screen"
-        />
-      </div>
-
-      {/* Navbar - Sticky Glassmorphism */}
+      {/* Navbar (Crisp Frosted Glass) */}
       <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 inset-x-0 z-50 bg-white/5 backdrop-blur-2xl border-b border-white/10"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="fixed top-0 inset-x-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-200/50"
       >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
               </svg>
             </div>
-            <span className="text-xl font-bold tracking-tight">Smart<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Xerox</span></span>
+            <span className="text-lg font-bold tracking-tight text-slate-900">SmartXerox</span>
           </div>
-          <div className="flex items-center gap-6">
-            <Link to="/login" className="text-sm font-medium text-white/70 hover:text-white transition-colors">Sign In</Link>
-            <Link to="/register" className="relative group px-6 py-2.5 rounded-full overflow-hidden bg-white/10 hover:bg-white/20 border border-white/20 transition-all shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-              <span className="relative z-10 text-sm font-semibold">Get Started</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Sign in</Link>
+            <Link to="/register" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-md shadow-sm transition-all">
+              Create Account
             </Link>
           </div>
         </div>
       </motion.nav>
 
-      {/* Main Scroll Container */}
-      <div className="relative z-10">
-        
-        {/* Section 1: Hero (Fixed/Sticky behavior handled by framer-motion transforms) */}
-        <motion.section 
-          style={{ 
-            scale: heroScale, 
-            opacity: heroOpacity, 
-            y: heroY,
-            filter: heroBlur 
-          }}
-          className="sticky top-0 h-screen flex flex-col items-center justify-center px-6 pt-20 origin-center will-change-transform"
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-6 overflow-hidden">
+        <motion.div 
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="max-w-4xl mx-auto text-center"
         >
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-xs font-semibold text-purple-300 mb-8 shadow-2xl"
-          >
-            <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse shadow-[0_0_10px_rgba(168,85,247,0.8)]" />
-            Next Generation Printing Infrastructure
+          <motion.div variants={item} className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 shadow-sm rounded-full text-xs font-semibold text-slate-600 mb-8">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            </span>
+            Production Ready PWA
           </motion.div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-6xl md:text-8xl lg:text-[7rem] font-black tracking-tighter leading-[1.05] text-center max-w-6xl mx-auto"
-          >
-            Print dynamically.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400">
-              Never wait again.
-            </span>
+          <motion.h1 variants={item} className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-slate-900 tracking-tighter leading-[1.1]">
+            Document printing,<br className="hidden sm:block" /> streamlined.
           </motion.h1>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8 text-xl md:text-2xl text-white/50 max-w-3xl mx-auto text-center font-light leading-relaxed"
-          >
-            A powerful, immersive platform that completely eliminates physical queues and manual document handling.
+          <motion.p variants={item} className="mt-6 text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            A comprehensive infrastructure for print shops and customers. Schedule slots, automate page counts, and track your jobs in real-time.
           </motion.p>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-12 flex flex-col sm:flex-row items-center gap-6"
-          >
-            <Link to="/register" className="group relative px-8 py-4 bg-white text-black font-bold rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.3)] transition-all hover:scale-105 duration-300">
-              <span className="relative z-10 flex items-center gap-2 text-lg">
-                Start Booking Free
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
+          <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
+            <Link to="/register" className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-[0_8px_16px_-6px_rgba(37,99,235,0.4)] transition-all">
+              Start Booking Now
+            </Link>
+            <Link to="/login" className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 font-semibold border border-slate-200 rounded-lg shadow-sm transition-all">
+              Operator Console
             </Link>
           </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 1 }}
-            className="absolute bottom-10 flex flex-col items-center gap-2 text-white/40 text-sm font-medium tracking-widest uppercase"
-          >
-            <span className="animate-bounce">Scroll</span>
-            <div className="w-px h-12 bg-gradient-to-b from-white/40 to-transparent" />
-          </motion.div>
-        </motion.section>
 
-        {/* Section 2: Features (Overlays the sticky hero) */}
-        <motion.section 
-          style={{ y: featuresY, opacity: featuresOpacity }}
-          className="relative min-h-screen px-6 py-32 mt-[-50vh] flex items-center justify-center"
-        >
-          <div className="max-w-7xl mx-auto w-full">
-            <div className="text-center mb-24">
-              <h2 className="text-5xl md:text-7xl font-black tracking-tight">
-                Flawless <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Execution</span>
-              </h2>
-            </div>
+        </motion.div>
+      </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-1000">
-              {features.map((feature, i) => (
-                <TiltCard key={i} className="h-96">
-                  <div className="flex flex-col h-full p-10 justify-between">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg`}>
-                      {feature.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                      <p className="text-white/60 text-lg leading-relaxed">{feature.desc}</p>
-                    </div>
-                  </div>
-                </TiltCard>
-              ))}
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Section 3: Deep Glass Metrics Panel */}
-        <section className="relative min-h-screen flex items-center justify-center px-6 py-32">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-[100px] z-0" />
-          
-          <div className="max-w-5xl mx-auto relative z-10 w-full">
-            <TiltCard className="w-full">
-              <div className="p-16 md:p-24 text-center">
-                <h2 className="text-4xl md:text-6xl font-black mb-16">Platform Intelligence</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                  {[
-                    { value: '100%', label: 'Uptime Reliability' },
-                    { value: '< 1ms', label: 'Queue Sync Speed' },
-                    { value: 'AES-256', label: 'File Encryption' },
-                  ].map((stat, i) => (
-                    <div key={i} className="pt-8 md:pt-0">
-                      <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/50 mb-4">{stat.value}</div>
-                      <div className="text-lg font-medium text-white/50 uppercase tracking-widest">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
+      {/* Metrics Row */}
+      <section className="border-y border-slate-200 bg-white">
+        <div className="max-w-7xl mx-auto px-6 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-100">
+            {[
+              { label: 'Uptime', value: '99.9%' },
+              { label: 'Average Wait', value: '< 4m' },
+              { label: 'Secure Storage', value: '256-bit' },
+              { label: 'File Deletion', value: 'Instant' },
+            ].map((metric, i) => (
+              <div key={metric.label} className={i !== 0 ? "pl-8" : ""}>
+                <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{metric.value}</div>
+                <div className="text-sm font-medium text-slate-500 mt-1">{metric.label}</div>
               </div>
-            </TiltCard>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Footer CTA */}
-        <section className="relative py-40 px-6 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0520] z-0" />
-          <div className="max-w-4xl mx-auto text-center relative z-10">
-            <h2 className="text-5xl md:text-7xl font-black mb-8">Ready to step into the future?</h2>
-            <Link to="/register" className="inline-block px-12 py-5 bg-white text-black font-black text-xl rounded-full shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-[0_0_80px_rgba(255,255,255,0.4)] hover:scale-105 transition-all duration-300">
-              Join Smart Xerox Today
-            </Link>
+      {/* Bento Box Features */}
+      <section className="py-24 px-6 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16 max-w-2xl">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+              Everything you need to run a modern print operation.
+            </h2>
+            <p className="text-lg text-slate-500">
+              Built with precision to eliminate queues, reduce manual counting errors, and ensure absolute data privacy.
+            </p>
           </div>
-        </section>
 
-      </div>
+          <motion.div 
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            {bentoFeatures.map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                variants={item}
+                className={`group relative p-8 rounded-2xl border border-slate-200 shadow-sm overflow-hidden ${feature.colSpan} ${feature.bg} transition-shadow hover:shadow-md`}
+              >
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 border ${feature.bg === 'bg-slate-900 text-white' ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-200 text-slate-700 shadow-sm'}`}>
+                  {feature.icon}
+                </div>
+                <h3 className={`text-xl font-bold mb-2 tracking-tight ${feature.bg === 'bg-slate-900 text-white' ? 'text-white' : 'text-slate-900'}`}>{feature.title}</h3>
+                <p className={`leading-relaxed ${feature.bg === 'bg-slate-900 text-white' ? 'text-slate-300' : 'text-slate-500'}`}>{feature.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Workflows (Steps) */}
+      <section className="py-24 px-6 bg-white border-t border-slate-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Seamless Workflow</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative max-w-4xl mx-auto">
+            <div className="hidden md:block absolute top-6 left-[15%] right-[15%] h-[1px] bg-slate-200" />
+            
+            {steps.map((step) => (
+              <div key={step.num} className="relative z-10 bg-white pt-2 text-center">
+                <div className="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-6 shadow-md border-4 border-white">
+                  {step.num}
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{step.title}</h3>
+                <p className="text-slate-500">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Bottom */}
+      <section className="py-24 px-6 bg-slate-900 text-white text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto"
+        >
+          <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
+            Ready to upgrade your workflow?
+          </h2>
+          <p className="text-lg text-slate-400 mb-10 max-w-xl mx-auto">
+            Join the platform that is redefining document printing with precision and privacy.
+          </p>
+          <Link to="/register" className="inline-block px-8 py-4 bg-white text-slate-900 font-bold rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all">
+            Get Started For Free
+          </Link>
+        </motion.div>
+      </section>
+
+      {/* Simple Footer */}
+      <footer className="py-8 border-t border-slate-800 bg-slate-950 text-slate-500 text-center text-sm font-medium">
+        <p>© {new Date().getFullYear()} SmartXerox Inc. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
