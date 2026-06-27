@@ -88,11 +88,14 @@ export default function Dashboard() {
         const blob = await response.blob();
         const objectUrl = URL.createObjectURL(blob);
         const mimeType = res.data.mimeType || blob.type || '';
+        const fileName = (res.data.fileName || '').toLowerCase();
+        const isPdf = mimeType === 'application/pdf' || fileName.endsWith('.pdf');
+        const isImage = mimeType.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp)$/.test(fileName);
 
         setPreviewMeta({
           ...res.data,
           mimeType,
-          previewable: mimeType === 'application/pdf' || mimeType.startsWith('image/'),
+          previewable: isPdf || isImage,
         });
         setPreviewUrl(objectUrl);
       } catch {
